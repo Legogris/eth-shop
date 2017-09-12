@@ -1,11 +1,9 @@
 pragma solidity ^0.4.15;
 import 'zeppelin-solidity/contracts/ownership/Ownable.sol';
-import 'zeppelin-solidity/contracts/token/ERC20.sol';
 import './Order.sol';
 import './Product.sol';
 
-contract TokenOrder is Order {
-  ERC20 token;
+contract EtherOrder is Order {
   Product public product;
   address public buyer;
   address public seller;
@@ -22,22 +20,17 @@ contract TokenOrder is Order {
     Complete
   }
 
-  event LogOrderFunded(address _source, address _sender, uint _amount, uint _totalPaid);
-  event LogOrderFullyFunded(address _sender);
-
-  function TokenOrder(Product _product, address _seller, address _buyer, ERC20 _token, uint _totalAmount) {
+  function EtherOrder(Product _product, address _seller, address _buyer, uint _totalAmount) {
     product = _product;
     seller = _seller;
     buyer = _buyer;
     totalAmount = _totalAmount;
-    token = _token;
   }
 
   function withdrawPayment() returns (bool success) {
-    require(msg.sender == seller);
-    uint amount = token.balanceOf(this);
-    require(amount > 0);
-    token.approve(seller, amount);
+    uint amount = this.balance;
+    require(msg.sender == seller && amount > 0);
+    msg.sender.transfer(amount);
     LogWithdraw(msg.sender, amount);
     return true;
   }
@@ -49,17 +42,12 @@ contract TokenOrder is Order {
     return totalAmount - fundedAmount;
   }
 
-  function finalizePayment(address _source) returns (bool success) {
-    uint receivedAmount = token.balanceOf(_source);
-    require(fundedAmount + receivedAmount > fundedAmount);
-    if (!token.transferFrom(_source, this, receivedAmount)) {
-      revert();
-    }
-    fundedAmount += receivedAmount;
-    LogOrderFunded(_source, msg.sender, receivedAmount, fundedAmount);
+  function() payable {
+    require(fundedAmount + msg.value > fundedAmount);
+    fundedAmount += msg.value;
+    LogOrderFunded(msg.sender, msg.sender, msg.value, fundedAmount);
     if (remainingAmount() == 0) {
       LogOrderFullyFunded(msg.sender);
     }
-    return true;
   }
 }
