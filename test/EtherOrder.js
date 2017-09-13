@@ -34,7 +34,7 @@ contract('EtherOrder', (accounts) => {
     .then(() => order.remainingAmount())
     .then(result => {
       assert.equal(result.toString(10), web3.toWei('0.5', 'ether'))
-      return order.send(web3.toWei(0.5, 'ether'), { from: accounts[2] });
+      return order.send(web3.toWei(0.6, 'ether'), { from: accounts[2] });
     })
     .then(() => order.remainingAmount())
     .then(result => {
