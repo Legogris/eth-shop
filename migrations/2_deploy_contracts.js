@@ -1,5 +1,5 @@
-var SimpleStorage = artifacts.require("./SimpleStorage.sol");
+const Shop = artifacts.require("./Shop.sol");
 
-module.exports = function(deployer) {
-  deployer.deploy(SimpleStorage);
+module.exports = (deployer, network, accounts) => {
+  deployer.deploy(Shop, accounts[0]);
 };

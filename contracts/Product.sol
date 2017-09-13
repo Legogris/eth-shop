@@ -9,10 +9,11 @@ contract Product is Ownable {
 
   event LogOrder(address _order, uint indexed _productID, address indexed _seller, address indexed _buyer, address _token, uint _quantity);
 
-  function Product(uint _totalQuantity, uint _productID, address _seller) {
+  function Product(uint _totalQuantity, uint _productID, address _seller, ERC20 _token, uint _amount) {
     productID = _productID;
     totalQuantity = _totalQuantity;
     owner = _seller;
+    prices[_token] = _amount;
   }
 
   function setProductID(uint _productID) onlyOwner returns (bool success) {
