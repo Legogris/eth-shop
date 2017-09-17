@@ -25,9 +25,9 @@ contract TokenOrder is Order {
   event LogOrderFunded(address _source, address _sender, uint _amount, uint _totalPaid);
   event LogOrderFullyFunded(address _sender);
 
-  function TokenOrder(Product _product, address _seller, address _buyer, ERC20 _token, uint _totalAmount) {
+  function TokenOrder(Product _product, address _buyer, ERC20 _token, uint _totalAmount) {
     product = _product;
-    seller = _seller;
+    seller = product.owner();
     buyer = _buyer;
     totalAmount = _totalAmount;
     token = _token;
@@ -50,7 +50,7 @@ contract TokenOrder is Order {
   }
 
   function finalizePayment(address _source) returns (bool success) {
-    uint receivedAmount = token.balanceOf(_source);
+    uint receivedAmount = token.allowance(_source, this);
     require(fundedAmount + receivedAmount > fundedAmount);
     if (!token.transferFrom(_source, this, receivedAmount)) {
       revert();
