@@ -20,9 +20,9 @@ contract EtherOrder is Order {
     Complete
   }
 
-  function EtherOrder(Product _product, address _seller, address _buyer, uint _totalAmount) {
+  function EtherOrder(Product _product, address _buyer, uint _totalAmount) {
     product = _product;
-    seller = _seller;
+    seller = product.owner();
     buyer = _buyer;
     totalAmount = _totalAmount;
   }
@@ -30,8 +30,8 @@ contract EtherOrder is Order {
   function withdrawPayment() returns (bool success) {
     uint amount = this.balance;
     require(msg.sender == seller && amount > 0);
-    msg.sender.transfer(amount);
-    LogWithdraw(msg.sender, amount);
+    seller.transfer(amount);
+    LogWithdraw(seller, amount);
     return true;
   }
 
