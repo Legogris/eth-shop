@@ -6,7 +6,8 @@ contract Shop is Ownable {
   mapping(address => Product[]) public catalogues;
   mapping(address => bool) public vendorsApproved;
 
-  function Shop() Ownable() {
+  function Shop(address _owner) {
+    owner = _owner;
   }
 
   function addProduct(Product _product) returns (uint productID) {
