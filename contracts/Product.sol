@@ -1,5 +1,6 @@
 pragma solidity ^0.4.15;
 import './TokenOrder.sol';
+import './EtherOrder.sol';
 
 contract Product is Ownable {
   mapping (address => uint) public prices;
@@ -33,9 +34,9 @@ contract Product is Ownable {
     uint pricePerUnit = prices[_token];
     require(pricePerUnit > 0);
     if (_token == 0x0) {
-      // Todo ETH payment
+      order = new EtherOrder(this, msg.sender, pricePerUnit * _quantity);
     } else {
-      order = new TokenOrder(this, owner, msg.sender, ERC20(_token), pricePerUnit * _quantity);
+      order = new TokenOrder(this, msg.sender, ERC20(_token), pricePerUnit * _quantity);
     }
     totalQuantity--;
     LogOrder(order, productID, owner, msg.sender, _token, _quantity);
