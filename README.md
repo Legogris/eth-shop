@@ -9,8 +9,7 @@ Supports products that can be paid in ether and/or any ERC20 token(s).
 4. (Buyer) Pay order
 5. (Seller) Withdraw payment
 
-
-
+Tests illustrate usage.
 
 ## TODO
 * Track order status
