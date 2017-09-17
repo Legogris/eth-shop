@@ -12,7 +12,7 @@ contract Shop is Ownable {
 
   function addProduct(Product _product) returns (uint productID) {
     require(vendorsApproved[msg.sender]);
-    return catalogues[msg.sender].push(_product);
+    return catalogues[msg.sender].push(_product) - 1;
   }
 
   function approveVendor(address _vendor) onlyOwner returns (bool success) {
