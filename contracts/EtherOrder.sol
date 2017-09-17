@@ -9,16 +9,7 @@ contract EtherOrder is Order {
   address public seller;
   uint totalAmount;
 
-  OrderStatuses public status;
   uint public fundedAmount;
-  // Can be made enum for having statuses like shipped, dispute open, etc
-  enum OrderStatuses { 
-    New,
-    SellerApproved,
-    SellerCancelled,
-    Shipped,
-    Complete
-  }
 
   function EtherOrder(Product _product, address _buyer, uint _totalAmount) {
     product = _product;

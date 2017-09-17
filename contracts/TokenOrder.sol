@@ -11,16 +11,7 @@ contract TokenOrder is Order {
   address public seller;
   uint totalAmount;
 
-  OrderStatuses public status;
   uint public fundedAmount;
-  // Can be made enum for having statuses like shipped, dispute open, etc
-  enum OrderStatuses { 
-    New,
-    SellerApproved,
-    SellerCancelled,
-    Shipped,
-    Complete
-  }
 
   event LogOrderFunded(address _source, address _sender, uint _amount, uint _totalPaid);
   event LogOrderFullyFunded(address _sender);
